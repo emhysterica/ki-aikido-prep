@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Ki Aikido"/>
+<meta name="theme-color" content="#1a1a2e"/>
+<title>Ki Aikido — 3rd Kyu Prep</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink: #1a1a2e;
+  --ink2: #2d2d4a;
+  --paper: #f5f2eb;
+  --paper2: #ede9df;
+  --paper3: #e4dfd3;
+  --accent: #7c5c3a;
+  --accent2: #a67c52;
+  --red: #8b2020;
+  --green: #1a4a2e;
+  --blue: #1a2e4a;
+  --gold: #c9962a;
+  --serif: 'Shippori Mincho', serif;
+  --sans: 'DM Sans', sans-serif;
+  --tab-h: 56px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: var(--ink); }
+body { font-family: var(--sans); color: var(--ink); background: var(--paper); overflow: hidden; }
+
+/* LAYOUT */
+#app { display: flex; flex-direction: column; height: 100dvh; max-width: 480px; margin: 0 auto; background: var(--paper); position: relative; overflow: hidden; }
+#header { background: var(--ink); color: var(--paper); padding: 14px 20px 12px; flex-shrink: 0; border-bottom: 1px solid var(--ink2); }
+#header .subtitle { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent2); margin-bottom: 3px; font-family: var(--sans); font-weight: 300; }
+#header h1 { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--paper); letter-spacing: 0.02em; }
+#content { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding-bottom: calc(var(--tab-h) + var(--safe-bottom) + 8px); }
+#tabs { position: absolute; bottom: 0; left: 0; right: 0; height: calc(var(--tab-h) + var(--safe-bottom)); background: var(--ink); border-top: 1px solid var(--ink2); display: flex; padding-bottom: var(--safe-bottom); flex-shrink: 0; }
+.tab-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: none; border: none; color: #666; cursor: pointer; font-family: var(--sans); font-size: 10px; font-weight: 400; letter-spacing: 0.04em; padding: 6px 2px; transition: color 0.2s; }
+.tab-btn.active { color: var(--gold); }
+.tab-btn svg { width: 20px; height: 20px; }
+.section { display: none; padding: 16px; }
+.section.active { display: block; }
+
+/* CARDS */
+.card { background: var(--paper); border: 1px solid var(--paper3); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+.card-ink { background: var(--ink); border-color: var(--ink2); color: var(--paper); }
+.card-ink p, .card-ink .muted { color: #aaa; }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
+.stat-box { background: var(--ink); border-radius: 10px; padding: 12px 8px; text-align: center; }
+.stat-n { font-family: var(--serif); font-size: 26px; color: var(--gold); font-weight: 500; line-height: 1; }
+.stat-l { font-size: 10px; color: #888; margin-top: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* TECHNIQUE GROUPS */
+.group-card { background: var(--paper2); border: 1px solid var(--paper3); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+.group-head { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--paper3); }
+.group-name { font-family: var(--serif); font-size: 15px; font-weight: 500; }
+.group-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+.badge-teal { background: #d4eddf; color: #1a4a2e; }
+.badge-purple { background: #e4daf5; color: #3d1a6e; }
+.badge-amber { background: #f5e8ca; color: #6e3d1a; }
+.prog-wrap { height: 3px; background: var(--paper3); margin: 0 16px 0; overflow: hidden; }
+.prog-bar { height: 100%; background: var(--gold); transition: width 0.4s; }
+.check-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; border-bottom: 1px solid var(--paper3); }
+.check-item:last-child { border-bottom: none; }
+.check-num { font-size: 10px; color: #aaa; min-width: 22px; font-family: var(--serif); }
+.check-item input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--gold); flex-shrink: 0; cursor: pointer; }
+.check-name { font-size: 13px; font-weight: 400; cursor: pointer; line-height: 1.4; }
+.check-name.done { text-decoration: line-through; color: #aaa; }
+
+/* QUIZ */
+.quiz-meta { text-align: center; font-size: 11px; color: #888; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+.quiz-main { background: var(--ink); border-radius: 14px; padding: 24px 20px 18px; margin-bottom: 12px; min-height: 220px; display: flex; flex-direction: column; }
+.quiz-num { font-size: 10px; color: #555; text-align: center; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.quiz-name { font-family: var(--serif); font-size: 20px; color: var(--paper); text-align: center; line-height: 1.4; flex: 1; display: flex; align-items: center; justify-content: center; }
+.quiz-answer { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--ink2); display: none; }
+.ans-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent2); margin-bottom: 4px; margin-top: 10px; }
+.ans-label:first-child { margin-top: 0; }
+.ans-text { font-size: 13px; color: #ccc; line-height: 1.6; }
+.ki-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.ki-tag { font-size: 11px; padding: 2px 9px; border-radius: 20px; }
+.ki-tag-1 { background: #1a3a2a; color: #7ecfa0; }
+.ki-tag-2 { background: #3a2a1a; color: #cfaa7e; }
+.ki-tag-3 { background: #1a2a3a; color: #7eaacf; }
+.ki-tag-4 { background: #2e1a3a; color: #b07ecf; }
+.quiz-btns { display: flex; gap: 8px; }
+.qbtn { flex: 1; padding: 11px; border-radius: 10px; border: none; font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
+.qbtn:active { opacity: 0.7; }
+.qbtn-show { background: var(--ink2); color: var(--paper); }
+.qbtn-good { background: var(--green); color: #7ecfa0; }
+.qbtn-miss { background: #3a1a1a; color: #cf7e7e; }
+.filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.fbtn { padding: 5px 13px; border: 1px solid var(--paper3); border-radius: 20px; background: transparent; font-family: var(--sans); font-size: 12px; color: #888; cursor: pointer; }
+.fbtn.on { background: var(--ink); color: var(--gold); border-color: var(--ink); }
+.score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.score-txt { font-size: 13px; color: #888; }
+.missed-section { margin-top: 20px; }
+.missed-head { font-family: var(--serif); font-size: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.missed-pill { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #3a1a1a; color: #cf7e7e; }
+.missed-card { background: var(--paper2); border: 1px solid var(--paper3); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
+.missed-card-name { font-family: var(--serif); font-size: 14px; margin-bottom: 6px; }
+.missed-card-body { font-size: 12px; color: #666; line-height: 1.5; }
+
+/* KI PRINCIPLES */
+.principle { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--paper3); }
+.principle:last-of-type { border-bottom: none; }
+.p-num { font-family: var(--serif); font-size: 28px; color: var(--gold); min-width: 28px; line-height: 1; margin-top: 2px; }
+.p-name { font-family: var(--serif); font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+.p-desc { font-size: 13px; color: #555; line-height: 1.65; }
+.p-dojo { font-size: 12px; color: var(--accent); margin-top: 6px; font-style: italic; line-height: 1.5; }
+.five-list { font-size: 13px; color: #555; line-height: 2; }
+
+/* TRACKER */
+.log-form { background: var(--paper2); border: 1px solid var(--paper3); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+.log-form h3 { font-family: var(--serif); font-size: 15px; margin-bottom: 10px; }
+input[type=date], input[type=text] { width: 100%; padding: 9px 12px; border: 1px solid var(--paper3); border-radius: 8px; background: var(--paper); font-family: var(--sans); font-size: 13px; color: var(--ink); margin-bottom: 8px; outline: none; }
+input[type=date]:focus, input[type=text]:focus { border-color: var(--accent); }
+.btn-primary { width: 100%; padding: 11px; background: var(--ink); color: var(--gold); border: none; border-radius: 10px; font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; letter-spacing: 0.04em; }
+.btn-primary:active { opacity: 0.8; }
+.session-item { background: var(--paper2); border: 1px solid var(--paper3); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.session-date { font-family: var(--serif); font-size: 13px; font-weight: 500; }
+.session-note { font-size: 12px; color: #666; margin-top: 2px; line-height: 1.4; }
+.btn-rm { background: none; border: 1px solid var(--paper3); border-radius: 6px; padding: 3px 8px; font-size: 11px; color: #aaa; cursor: pointer; flex-shrink: 0; }
+.btn-rm:active { background: var(--paper3); }
+.empty-state { text-align: center; color: #aaa; font-size: 13px; padding: 30px 0; }
+
+/* FORMAT */
+.fmt-item { padding: 12px 0; border-bottom: 1px solid var(--paper3); }
+.fmt-item:last-child { border-bottom: none; }
+.fmt-step { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 4px; }
+.fmt-text { font-size: 13px; color: #555; line-height: 1.65; }
+
+/* SECTION TITLES */
+.section-title { font-family: var(--serif); font-size: 18px; font-weight: 500; margin-bottom: 6px; }
+.section-sub { font-size: 12px; color: #888; margin-bottom: 14px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="header">
+    <div class="subtitle">Oregon Ki Society · Shin Shin Toitsu Aikido</div>
+    <h1>3rd Kyu Test Prep</h1>
+  </div>
+  <div id="content">
+
+    <!-- TECHNIQUES -->
+    <div id="sec-techniques" class="section active">
+      <div class="stats-grid" id="cl-stats"></div>
+      <div id="cl-body"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="sec-quiz" class="section">
+      <div class="section-title">Name quiz</div>
+      <div class="section-sub">See the technique name. Picture the attack and throw before revealing.</div>
+      <div class="filter-row" id="quiz-filters"></div>
+      <div class="score-row">
+        <span class="score-txt" id="quiz-score">Score: 0 / 0</span>
+        <button class="fbtn on" onclick="resetQuiz()">Shuffle ↺</button>
+      </div>
+      <div class="quiz-meta" id="quiz-meta"></div>
+      <div class="quiz-main">
+        <div class="quiz-num" id="quiz-num"></div>
+        <div class="quiz-name" id="quiz-front"></div>
+        <div class="quiz-answer" id="quiz-back">
+          <div class="ans-label">Attack</div>
+          <div class="ans-text" id="qb-attack"></div>
+          <div class="ans-label">Ki Aikido approach</div>
+          <div class="ans-text" id="qb-throw"></div>
+          <div id="qb-var-wrap">
+            <div class="ans-label">Irimi / Tenkan</div>
+            <div class="ans-text" id="qb-var"></div>
+          </div>
+          <div class="ans-label">Ki principles</div>
+          <div class="ki-tags" id="qb-ki"></div>
+        </div>
+      </div>
+      <div class="quiz-btns" id="qc-reveal">
+        <button class="qbtn qbtn-show" onclick="revealQuiz()">Show description</button>
+      </div>
+      <div class="quiz-btns" id="qc-mark" style="display:none;">
+        <button class="qbtn qbtn-miss" onclick="markQuiz(false)">Didn't know</button>
+        <button class="qbtn qbtn-good" onclick="markQuiz(true)">Got it</button>
+      </div>
+      <div id="missed-section" class="missed-section" style="display:none;">
+        <div class="missed-head">Review missed <span class="missed-pill" id="missed-count"></span></div>
+        <div id="missed-list"></div>
+      </div>
+    </div>
+
+    <!-- KI PRINCIPLES -->
+    <div id="sec-ki" class="section">
+      <div class="section-title">Four basic principles</div>
+      <div class="section-sub">In Ki Aikido, technique follows from mind-body unification. All four principles are ultimately one.</div>
+      <div class="card">
+        <div class="principle">
+          <div class="p-num">1</div>
+          <div>
+            <div class="p-name">Keep one point</div>
+            <div class="p-desc">Settle your awareness and weight into your seika tanden — just below the navel. This is your physical and mental center of gravity. A calm, collected mind at one point makes your body stable and responsive rather than stiff or scattered.</div>
+            <div class="p-dojo">In technique: a centered nage cannot be easily pushed off balance — uke's attack finds nothing to push against.</div>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="p-num">2</div>
+          <div>
+            <div class="p-name">Relax completely</div>
+            <div class="p-desc">True relaxation is not limpness — it is the absence of unnecessary tension. A relaxed body moves faster, feels uke's energy more clearly, and does not telegraph intention. Muscular force creates conflict; relaxed ki moves through and around it.</div>
+            <div class="p-dojo">In technique: gripping, bracing, or forcing a throw breaks connection with uke. Let the throw happen rather than making it happen.</div>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="p-num">3</div>
+          <div>
+            <div class="p-name">Keep weight underside</div>
+            <div class="p-desc">Relax the weight of every part of your body to its natural underside — like water settling. This creates rootedness without effort. Arms held with weight underside feel substantial to uke without any muscular push.</div>
+            <div class="p-dojo">In technique: arms extended with weight underside are difficult to lift or resist. This is the physical foundation of kokyunage and most projections.</div>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="p-num">4</div>
+          <div>
+            <div class="p-name">Extend ki</div>
+            <div class="p-desc">Ki extends naturally from a unified mind and body. Think of light from a lamp — it does not stop at the bulb. Your awareness and intention extend beyond your fingertips, beyond the mat. Extending ki through uke — not to them — leads them naturally rather than pushing or pulling.</div>
+            <div class="p-dojo">Zanshin is the continuation of extended ki after the throw. It is not a pose — it is sustained awareness.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:0;">
+        <div class="p-name" style="margin-bottom:8px;">Five principles of Shin Shin Toitsu Aikido</div>
+        <div class="five-list">
+          1. Ki is extending<br>
+          2. Know your partner's mind<br>
+          3. Respect your partner's ki<br>
+          4. Put yourself in your partner's place<br>
+          5. Perform with confidence
+        </div>
+      </div>
+    </div>
+
+    <!-- TRACKER -->
+    <div id="sec-tracker" class="section">
+      <div class="section-title">Practice log</div>
+      <div class="log-form">
+        <h3>Log a session</h3>
+        <input type="date" id="log-date"/>
+        <input type="text" id="log-note" placeholder="What did you work on?"/>
+        <button class="btn-primary" onclick="logSession()">Add session</button>
+      </div>
+      <div id="session-list"></div>
+    </div>
+
+    <!-- FORMAT -->
+    <div id="sec-format" class="section">
+      <div class="section-title">What to expect</div>
+      <div class="section-sub">The examiner observes not just your mechanics but your ki — calmness, extension, and connection with uke throughout.</div>
+      <div class="card">
+        <div class="fmt-item">
+          <div class="fmt-step">Before you begin</div>
+          <div class="fmt-text">Settle into one point. Take a breath. The test starts in your mind before it starts on the mat. Examiners notice whether you are centered and present, not just whether footwork is correct.</div>
+        </div>
+        <div class="fmt-item">
+          <div class="fmt-step">1 — Kumiwaza (24 techniques)</div>
+          <div class="fmt-text">The examiner calls each technique by name. Blend and lead — never meet force with force. Both irimi and tenkan required where listed. Maintain zanshin after each throw.</div>
+        </div>
+        <div class="fmt-item">
+          <div class="fmt-step">2 — Jiyu waza (free techniques)</div>
+          <div class="fmt-text">5 throws of your choice for each of 4 attacks: Yokomenuchi, Katatetori, Ushirotekubitori, and Tantotori (knife). Vary your techniques. Stay centered and lead uke rather than reacting.</div>
+        </div>
+        <div class="fmt-item">
+          <div class="fmt-step">3 — Bokken 1: Happo Giri</div>
+          <div class="fmt-text">Eight-direction sword cutting kata, performed solo. Each cut should express extended ki, not just arm movement. Keep one point through every transition.</div>
+        </div>
+        <div class="fmt-item">
+          <div class="fmt-step">4 — Jo 1</div>
+          <div class="fmt-text">First jo kata. Relaxed grip, weight underside, ki extending through the tip of the staff on every strike and thrust.</div>
+        </div>
+        <div class="fmt-item">
+          <div class="fmt-step">Etiquette</div>
+          <div class="fmt-text">Bow in with sincerity. If you make an error — reset with one point and continue. Do not apologize mid-test. The examiner wants to see that your mind stays calm under pressure.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+
+  <div id="tabs">
+    <button class="tab-btn active" onclick="showTab('techniques',this)" title="Techniques">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      List
+    </button>
+    <button class="tab-btn" onclick="showTab('quiz',this)" title="Quiz">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+      Quiz
+    </button>
+    <button class="tab-btn" onclick="showTab('ki',this)" title="Ki Principles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3c0 0-4 3-4 8s4 8 4 8"/><path d="M12 3c0 0 4 3 4 8s-4 8-4 8"/><line x1="12" y1="3" x2="12" y2="21"/><path d="M6 10h12M6 14h12"/></svg>
+      Ki
+    </button>
+    <button class="tab-btn" onclick="showTab('tracker',this)" title="Practice Log">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+      Log
+    </button>
+    <button class="tab-btn" onclick="showTab('format',this)" title="Test Format">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      Test
+    </button>
+  </div>
+</div>
+
+<script>
+const GROUPS=[
+  {label:"Kumiwaza",badge:"teal",techs:[
+    {num:1,name:"Katate Kosatori Kokyunage",attack:"Cross-wrist grab — uke grabs your right wrist with their right hand (or left with left)",throw:"Extend ki forward and lead uke's energy in the direction it is already moving. Stay relaxed and let uke's own momentum carry them through a forward breath projection. Keep one point throughout.",var:"",ki:[1,4]},
+    {num:2,name:"Katatetori Tenkan Kokyunage",attack:"Single wrist grab",throw:"Pivot 180° (tenkan), moving with uke's energy rather than against it. Your arm extends naturally as you turn — do not pull or force. The tenkan itself unbalances uke; your extended ki leads them into the fall.",var:"",ki:[1,4]},
+    {num:3,name:"Katatori Ikkyo (irimi & tenkan)",attack:"Shoulder grab",throw:"First teaching. Guide uke's elbow and wrist downward in a large relaxed arc — no muscular pressing. The lead comes from your center, not your arms. Uke's balance is taken naturally as you extend ki forward and down to the mat pin.",var:"Irimi: enter calmly to the inside with weight underside. Tenkan: pivot and lead the arc around to the side.",ki:[2,3]},
+    {num:4,name:"Munetsuki Koteoroshi",attack:"Straight punch to the chest",throw:"Blend off the line of the punch without tensing. Receive the wrist and drop it with your body weight — not arm strength — directly downward. Keep weight underside so the drop is heavy and effortless.",var:"",ki:[2,3]},
+    {num:5,name:"Yokomenuchi Shihonage (irimi & tenkan)",attack:"Diagonal strike to the side of the head/neck",throw:"Four-direction throw. Meet the strike with extended ki — not a block — and guide uke's arm. Rotate through your center, not with arm strength. The throw completes when ki extends fully through uke's arm in the chosen direction.",var:"Irimi: enter to the inside of the strike. Tenkan: blend to the outside and pivot through.",ki:[1,4]},
+    {num:6,name:"Shomenuchi Kokyunage",attack:"Overhead front strike to the top of the head",throw:"Receive the strike with rising ki — extend upward to meet it without bracing. Blend and redirect the energy off to the side or forward in a breath projection. The throw is a natural extension of harmonizing with uke's committed energy.",var:"",ki:[2,4]},
+    {num:7,name:"Katatetori Nikkyo (irimi & tenkan)",attack:"Single wrist grab",throw:"Second teaching. After blending, fold uke's wrist inward — the movement comes from your relaxed lead, not from forcing the joint. Keep one point so your body weight (not arm tension) creates the pressure. Lead uke to the mat naturally.",var:"Irimi: enter and apply directly. Tenkan: pivot first, then fold the wrist as you lead.",ki:[1,2]},
+    {num:8,name:"Katatori Sankyo (irimi & tenkan)",attack:"Shoulder grab",throw:"Third teaching. Take the wrist and guide it in an upward spiral — the spiral is a natural ki path, not a muscular crank. Uke follows the spiral because extending ki through their arm leads their whole body.",var:"Irimi: direct entry into the spiral. Tenkan: pivot and draw uke into the spiral as you turn.",ki:[1,4]},
+    {num:9,name:"Katatori Yonkyo (irimi & tenkan)",attack:"Shoulder grab",throw:"Fourth teaching. Guide uke's arm and apply the forearm contact near their wrist — effectiveness comes from relaxed, settled body weight, not gripping hard. Keep weight underside so the contact has natural heaviness.",var:"Irimi: step in and apply weight underside. Tenkan: pivot and settle into the technique.",ki:[2,3]},
+    {num:10,name:"Yokomenuchi Kokyunage (Zenponage)",attack:"Diagonal strike to the side of the head/neck",throw:"Forward breath projection (zenponage). Blend with the strike and extend ki forward through uke's arm, leading them into a forward roll. You are not pushing — you are extending ki past them so their body follows naturally.",var:"",ki:[2,4]},
+    {num:11,name:"Ryotetori Kokyunage (Zenponage)",attack:"Both wrists grabbed simultaneously",throw:"Raise both arms with weight underside — do not muscle upward. The rising ki breaks uke's grip naturally. Extend forward and project with both arms leading, maintaining one point so your center drives the throw.",var:"",ki:[3,4]},
+    {num:12,name:"Ushirotekubitori Kokyunage (Zenponage)",attack:"Both wrists grabbed from behind",throw:"Step forward with one point settled, raise arms with ki extending upward and forward. The forward step breaks uke's structure from behind. Extend ki through to project uke forward — do not yank or twist against the grip.",var:"",ki:[1,4]},
+    {num:13,name:"Ushirotekubitori Kubijimi (Sankyonage)",attack:"Both wrists grabbed from behind",throw:"Turn into uke with relaxed entry — your turning body naturally creates the off-balance. Apply the sankyo-style spiral wrist lead while drawing uke forward. The throw comes from your whole-body rotation, not from arm movement alone.",var:"",ki:[2,4]},
+    {num:14,name:"Tenchinage (irimi & tenkan)",attack:"Both wrists grabbed (ryotetori)",throw:"Heaven-and-earth throw. One arm rises (heaven) with extended ki upward; the other drops (earth) with weight underside. These two directions divide uke's attention and break balance simultaneously. No force needed — the split itself takes the fall.",var:"Irimi: step forward through uke's center as you split heaven and earth. Tenkan: pivot and draw uke off balance as you separate.",ki:[3,4]},
+    {num:15,name:"Ushirotori Kokyunage",attack:"Bear hug from behind, arms pinned",throw:"Drop your weight by deepening one point — this alone often breaks the hold. Turn from your center and extend ki outward. The projection is not a push; it is a natural release of extended ki that uke cannot hold onto.",var:"",ki:[1,3]},
+    {num:16,name:"Katatetori Ryotemochi Kokyunage (En Undo)",attack:"One wrist grabbed with both of uke's hands",throw:"Circular movement (en undo). Draw a smooth horizontal circle with your grabbed arm. The circular path of extended ki continually changes the angle of uke's grip until their structure breaks and the projection flows naturally.",var:"",ki:[2,4]},
+    {num:17,name:"Zagi Handachi Shomenuchi Kokyunage",attack:"Nage in seiza, uke standing — overhead front strike",throw:"From seiza, meet the overhead strike from your seated one point — do not lean or brace upward. Extend ki to receive and redirect, projecting the standing uke with a relaxed breath throw. Height difference is neutralized by ki extension.",var:"",ki:[1,4]},
+    {num:18,name:"Zagi Handachi Munetsuki Koteoroshi (katameru)",attack:"Nage in seiza, uke standing — straight chest punch",throw:"Blend off the punch line from seiza, receive the wrist and drop it with body weight (not arm tension). Koteoroshi drop leads uke to the mat; complete with a settled pin (katameru) maintaining one point and weight underside.",var:"",ki:[1,3]},
+    {num:19,name:"Zagi Handachi Yokomenuchi Kokyunage (Zenponage)",attack:"Nage in seiza, uke standing — diagonal head/neck strike",throw:"From seiza, extend ki forward to meet the strike. Blend and lead uke's energy into a forward projection (zenponage). Your seated stability is your one point — do not rise or lurch; let the extension do the work.",var:"",ki:[1,4]},
+    {num:20,name:"Munetsuki Kokyunage (Zenponage)",attack:"Straight chest punch",throw:"Blend off the line and extend ki forward through uke's punching arm, leading them over and forward into a roll. The projection follows naturally from your extended ki — you are leading uke's energy forward, not blocking it.",var:"",ki:[2,4]},
+    {num:21,name:"Munetsuki Kokyunage (Sudori)",attack:"Straight chest punch",throw:"Pass-through (sudori). Step completely off the line so the punch passes by. Extend ki behind uke and project them forward from behind — no contact needed. Your presence and extended ki behind them creates the unbalancing.",var:"",ki:[1,4]},
+    {num:22,name:"Munetsuki Kokyunage (Kaitennage)",attack:"Straight chest punch",throw:"Rotary throw. Blend and guide the punching arm into a large circular arc — extend ki through the arc continuously. Uke's shoulder rotates until their structure collapses into the fall. Keep one point as your center anchors the rotation.",var:"",ki:[1,4]},
+    {num:23,name:"Katatetori Ryotemochi Koteoroshi",attack:"One wrist grabbed with both of uke's hands",throw:"Use the double-grab as a connection point — do not fight it. Settle your weight underside and drop your hand naturally downward. The heaviness of weight underside through uke's grip breaks their balance and leads them to the mat.",var:"",ki:[2,3]},
+    {num:24,name:"Katatetori Ryotemochi Kokyunage (Hachi No Ji)",attack:"One wrist grabbed with both of uke's hands",throw:"Figure-eight (hachi no ji) movement. Trace a relaxed figure-8 path with the grabbed hand, extending ki through each curve. The changing direction of the ki path continuously disrupts uke's grip until the throw releases naturally.",var:"",ki:[2,4]},
+  ]},
+  {label:"Jiyu waza",badge:"purple",techs:[
+    {num:"JW-1",name:"Yokomenuchi — 5 throws",attack:"Uke attacks with repeated diagonal head/neck strikes",throw:"Perform 5 varied techniques fluidly. Stay centered — this tests whether your ki remains extended under continuous pressure. Suggested: Shihonage, Kokyunage, Kaitennage, Iriminage, Kotegaeshi.",var:"",ki:[1,4]},
+    {num:"JW-2",name:"Katatetori — 5 throws",attack:"Uke attacks with repeated single wrist grabs",throw:"Perform 5 varied techniques. Each grab is a connection — blend from one point each time. Suggested: Ikkyo, Nikkyo, Sankyo, Kokyunage, Shihonage.",var:"",ki:[1,2]},
+    {num:"JW-3",name:"Ushirotekubitori — 5 throws",attack:"Uke grabs both wrists from behind repeatedly",throw:"Perform 5 varied techniques. Lead from one point before uke fully establishes the rear grab. Suggested: Kokyunage zenponage, Koshinage, Iriminage, Kotegaeshi, Kaitennage.",var:"",ki:[1,4]},
+    {num:"JW-4",name:"Tantotori — 5 throws (knife)",attack:"Uke attacks with a tanto (knife) repeatedly",throw:"Perform 5 varied disarms and throws. Respect your partner's ki — move with calm awareness, not panic. Redirect the weapon hand by extending ki through and beyond it.",var:"",ki:[2,4]},
+  ]},
+  {label:"Weapons",badge:"amber",techs:[
+    {num:"W-1",name:"Bokken 1: Happo Giri",attack:"Solo kata — no uke",throw:"Eight-direction cutting kata. Each cut is an expression of ki extending through the sword. Keep one point through every direction change. Cuts should feel settled and complete, not hurried.",var:"",ki:[1,4]},
+    {num:"W-2",name:"Jo 1",attack:"Solo kata — no uke",throw:"First jo kata. Hold the staff with relaxed hands — weight underside, not a death grip. Ki extends through both ends of the jo on every strike and thrust. Each movement is complete before the next begins.",var:"",ki:[2,3]},
+  ]},
+];
+
+const KI_NAMES=["Keep one point","Relax completely","Keep weight underside","Extend ki"];
+const KI_CLS=["ki-tag-1","ki-tag-2","ki-tag-3","ki-tag-4"];
+
+let checks={},sessions=[];
+let deck=[],idx=0,correct=0,total=0,missed=[];
+let filter="All";
+
+function load(){
+  try{checks=JSON.parse(localStorage.getItem('ki3k_chk')||'{}');}catch(e){}
+  try{sessions=JSON.parse(localStorage.getItem('ki3k_ses')||'[]');}catch(e){}
+}
+function sc(){try{localStorage.setItem('ki3k_chk',JSON.stringify(checks));}catch(e){}}
+function ss(){try{localStorage.setItem('ki3k_ses',JSON.stringify(sessions));}catch(e){}}
+
+function buildChecklist(){
+  let t=0,d=0;
+  GROUPS.forEach(g=>g.techs.forEach(x=>{t++;if(checks[String(x.num)])d++;}));
+  const p=t?Math.round(d/t*100):0;
+  document.getElementById('cl-stats').innerHTML=`
+    <div class="stat-box"><div class="stat-n">${d}</div><div class="stat-l">Done</div></div>
+    <div class="stat-box"><div class="stat-n">${t-d}</div><div class="stat-l">Left</div></div>
+    <div class="stat-box"><div class="stat-n">${p}%</div><div class="stat-l">Ready</div></div>`;
+  document.getElementById('cl-body').innerHTML=GROUPS.map(g=>{
+    const gd=g.techs.filter(x=>checks[String(x.num)]).length;
+    const gp=Math.round(gd/g.techs.length*100);
+    return `<div class="group-card">
+      <div class="group-head">
+        <span class="group-name">${g.label}</span>
+        <span class="group-badge badge-${g.badge}">${gd}/${g.techs.length}</span>
+      </div>
+      <div class="prog-wrap" style="margin-bottom:0;"><div class="prog-bar" style="width:${gp}%"></div></div>
+      ${g.techs.map(x=>{const k=String(x.num);const c=!!checks[k];return`<div class="check-item">
+        <span class="check-num">${x.num}</span>
+        <input type="checkbox" id="ck${k}" ${c?'checked':''} onchange="tog('${k}')"/>
+        <label class="check-name${c?' done':''}" for="ck${k}">${x.name}</label>
+      </div>`;}).join('')}
+    </div>`;}).join('');
+}
+
+function tog(k){checks[k]=!checks[k];sc();buildChecklist();}
+
+function buildFilters(){
+  const fs=["All",...GROUPS.map(g=>g.label)];
+  document.getElementById('quiz-filters').innerHTML=fs.map(f=>`<button class="fbtn${f===filter?' on':''}" onclick="setF('${f}')">${f}</button>`).join('');
+}
+function setF(f){filter=f;buildFilters();resetQuiz();}
+
+function getDeck(){
+  let a=[];
+  GROUPS.forEach(g=>{if(filter==="All"||filter===g.label)a.push(...g.techs);});
+  return [...a].sort(()=>Math.random()-0.5);
+}
+
+function resetQuiz(){
+  deck=getDeck();idx=0;correct=0;total=0;missed=[];
+  document.getElementById('missed-section').style.display='none';
+  showCard();
+}
+
+function showCard(){
+  if(idx>=deck.length){
+    document.getElementById('quiz-front').textContent='Quiz complete!';
+    document.getElementById('quiz-num').textContent='';
+    document.getElementById('quiz-back').style.display='none';
+    document.getElementById('quiz-meta').textContent=`Final score: ${correct} / ${deck.length}`;
+    document.getElementById('qc-reveal').innerHTML='<button class="qbtn qbtn-show" onclick="resetQuiz()">Shuffle & restart</button>';
+    document.getElementById('qc-mark').style.display='none';
+    document.getElementById('quiz-score').textContent=`Score: ${correct} / ${total}`;
+    if(missed.length){
+      document.getElementById('missed-section').style.display='block';
+      document.getElementById('missed-count').textContent=missed.length;
+      document.getElementById('missed-list').innerHTML=missed.map(x=>`<div class="missed-card">
+        <div class="missed-card-name">${x.num}. ${x.name}</div>
+        <div class="missed-card-body"><strong>Attack:</strong> ${x.attack}<br><br>${x.throw}</div>
+      </div>`).join('');
+    }
+    return;
+  }
+  const t=deck[idx];
+  document.getElementById('quiz-num').textContent=`${idx+1} of ${deck.length}`;
+  document.getElementById('quiz-front').textContent=`${t.num}. ${t.name}`;
+  document.getElementById('qb-attack').textContent=t.attack;
+  document.getElementById('qb-throw').textContent=t.throw;
+  const vw=document.getElementById('qb-var-wrap');
+  if(t.var){vw.style.display='block';document.getElementById('qb-var').textContent=t.var;}else{vw.style.display='none';}
+  document.getElementById('qb-ki').innerHTML=t.ki.map(i=>`<span class="ki-tag ${KI_CLS[i-1]}">${KI_NAMES[i-1]}</span>`).join('');
+  document.getElementById('quiz-back').style.display='none';
+  document.getElementById('quiz-meta').textContent='';
+  document.getElementById('quiz-score').textContent=`Score: ${correct} / ${total}`;
+  document.getElementById('qc-reveal').innerHTML='<button class="qbtn qbtn-show" onclick="revealQuiz()">Show description</button>';
+  document.getElementById('qc-mark').style.display='none';
+}
+
+function revealQuiz(){
+  document.getElementById('quiz-back').style.display='block';
+  document.getElementById('qc-reveal').innerHTML='';
+  document.getElementById('qc-mark').style.display='flex';
+}
+
+function markQuiz(ok){
+  total++;
+  if(ok)correct++;else missed.push(deck[idx]);
+  idx++;showCard();
+}
+
+function renderSessions(){
+  const el=document.getElementById('session-list');
+  if(!sessions.length){el.innerHTML='<div class="empty-state">No sessions logged yet.<br>Keep training!</div>';return;}
+  el.innerHTML=[...sessions].reverse().map((s,i)=>`<div class="session-item">
+    <div><div class="session-date">${s.date||'Undated'}</div><div class="session-note">${s.note||'—'}</div></div>
+    <button class="btn-rm" onclick="delSes(${sessions.length-1-i})">Remove</button>
+  </div>`).join('');
+}
+
+function logSession(){
+  const d=document.getElementById('log-date').value;
+  const n=document.getElementById('log-note').value.trim();
+  if(!d&&!n)return;
+  sessions.push({date:d||'Undated',note:n});ss();
+  document.getElementById('log-note').value='';
+  renderSessions();
+}
+
+function delSes(i){sessions.splice(i,1);ss();renderSessions();}
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('content').scrollTop=0;
+}
+
+load();
+document.getElementById('log-date').value=new Date().toISOString().split('T')[0];
+buildChecklist();buildFilters();resetQuiz();renderSessions();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+}
+</script>
+</body>
+</html>
