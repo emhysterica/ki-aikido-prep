@@ -1,4 +1,4 @@
-const CACHE = 'ki-aikido-v1';
+const CACHE = 'ki-aikido-v2';
 const ASSETS = [
   './',
   './index.html',
