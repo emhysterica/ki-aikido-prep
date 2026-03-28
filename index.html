@@ -469,17 +469,49 @@ function sn(){try{localStorage.setItem('ki3k_notes',JSON.stringify(notes));}catc
 function sjn(){try{localStorage.setItem('ki3k_jwnotes',JSON.stringify(jwNotes));}catch(e){}}
 function stn(){try{localStorage.setItem('ki3k_thrownotes',JSON.stringify(throwNotes));}catch(e){}}
 
-/* ── TTS ── */
-function speak(text){
+/* ── TTS PHONETIC TABLE ── */
+const PHONETIC={
+  // Full technique names keyed exactly as in data
+  "Katate Kosatori Kokyunage":           "kah-tah-teh  koh-sah-toh-ree  koh-kyoo-nah-geh",
+  "Katatetori Tenkan Kokyunage":         "kah-tah-teh-toh-ree  ten-kahn  koh-kyoo-nah-geh",
+  "Katatori Ikkyo (irimi & tenkan)":     "kah-tah-toh-ree  eek-kyoh.  ee-ree-mee  and  ten-kahn",
+  "Munetsuki Koteoroshi":                "moo-neh-tsoo-kee  koh-teh-oh-roh-shee",
+  "Yokomenuchi Shihonage (irimi & tenkan)": "yoh-koh-meh-noo-chee  shee-hoh-nah-geh.  ee-ree-mee  and  ten-kahn",
+  "Shomenuchi Kokyunage":                "shoh-meh-noo-chee  koh-kyoo-nah-geh",
+  "Katatetori Nikkyo (irimi & tenkan)":  "kah-tah-teh-toh-ree  neek-kyoh.  ee-ree-mee  and  ten-kahn",
+  "Katatori Sankyo (irimi & tenkan)":    "kah-tah-toh-ree  sahn-kyoh.  ee-ree-mee  and  ten-kahn",
+  "Katatori Yonkyo (irimi & tenkan)":    "kah-tah-toh-ree  yohn-kyoh.  ee-ree-mee  and  ten-kahn",
+  "Yokomenuchi Kokyunage (Zenponage)":   "yoh-koh-meh-noo-chee  koh-kyoo-nah-geh.  zen-poh-nah-geh",
+  "Ryotetori Kokyunage (Zenponage)":     "ryoh-teh-toh-ree  koh-kyoo-nah-geh.  zen-poh-nah-geh",
+  "Ushirotekubitori Kokyunage (Zenponage)": "oo-shee-roh-teh-koo-bee-toh-ree  koh-kyoo-nah-geh.  zen-poh-nah-geh",
+  "Ushirotekubitori Kubijimi (Sankyonage)": "oo-shee-roh-teh-koo-bee-toh-ree  koo-bee-jee-mee.  sahn-kyoh-nah-geh",
+  "Tenchinage (irimi & tenkan)":         "ten-chee-nah-geh.  ee-ree-mee  and  ten-kahn",
+  "Ushirotori Kokyunage":                "oo-shee-roh-toh-ree  koh-kyoo-nah-geh",
+  "Katatetori Ryotemochi Kokyunage (En Undo)": "kah-tah-teh-toh-ree  ryoh-teh-moh-chee  koh-kyoo-nah-geh.  en  oon-doh",
+  "Zagi Handachi Shomenuchi Kokyunage":  "zah-gee  hahn-dah-chee  shoh-meh-noo-chee  koh-kyoo-nah-geh",
+  "Zagi Handachi Munetsuki Koteoroshi (katameru)": "zah-gee  hahn-dah-chee  moo-neh-tsoo-kee  koh-teh-oh-roh-shee.  kah-tah-meh-roo",
+  "Zagi Handachi Yokomenuchi Kokyunage (Zenponage)": "zah-gee  hahn-dah-chee  yoh-koh-meh-noo-chee  koh-kyoo-nah-geh.  zen-poh-nah-geh",
+  "Munetsuki Kokyunage (Zenponage)":     "moo-neh-tsoo-kee  koh-kyoo-nah-geh.  zen-poh-nah-geh",
+  "Munetsuki Kokyunage (Sudori)":        "moo-neh-tsoo-kee  koh-kyoo-nah-geh.  soo-doh-ree",
+  "Munetsuki Kokyunage (Kaitennage)":    "moo-neh-tsoo-kee  koh-kyoo-nah-geh.  kai-ten-nah-geh",
+  "Katatetori Ryotemochi Koteoroshi":    "kah-tah-teh-toh-ree  ryoh-teh-moh-chee  koh-teh-oh-roh-shee",
+  "Katatetori Ryotemochi Kokyunage (Hachi No Ji)": "kah-tah-teh-toh-ree  ryoh-teh-moh-chee  koh-kyoo-nah-geh.  hah-chee  noh  jee",
+  "Bokken 1: Happo Giri":                "bok-ken  one.  hahp-poh  gee-ree",
+  "Jo 1":                                "joh  one",
+};
+
+function speak(name){
   if(!ttsEnabled)return;
   window.speechSynthesis.cancel();
+  const text=PHONETIC[name]||name;
   const u=new SpeechSynthesisUtterance(text);
-  u.rate=0.88; u.pitch=1.0; u.lang='en-US';
+  u.rate=0.82; u.pitch=1.0; u.lang='en-US';
   window.speechSynthesis.speak(u);
 }
 function speakCurrent(){
-  const el=document.getElementById('quiz-front');
-  if(el)speak(el.textContent.replace(/^\d+\.\s*/,''));
+  if(!ttsEnabled)return;
+  const rawName=document.getElementById('quiz-front').textContent.replace(/^\d+[\.\-]\s*/,'');
+  speak(rawName);
 }
 
 /* ── CHECKLIST ── */
@@ -558,7 +590,7 @@ function showCard(){
   if(ttsEnabled){
     setTimeout(()=>{
       speak(t.name);
-      setTimeout(()=>document.getElementById('tts-hint').textContent='',2200);
+      setTimeout(()=>document.getElementById('tts-hint').textContent='',4500);
     },300);
   }
 }
