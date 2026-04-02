@@ -469,9 +469,41 @@ function sn(){try{localStorage.setItem('ki3k_notes',JSON.stringify(notes));}catc
 function sjn(){try{localStorage.setItem('ki3k_jwnotes',JSON.stringify(jwNotes));}catch(e){}}
 function stn(){try{localStorage.setItem('ki3k_thrownotes',JSON.stringify(throwNotes));}catch(e){}}
 
-/* ── TTS PHONETIC TABLE ── */
+/* ── AUDIO MAP — add your recordings to the /audio folder in GitHub ── */
+/* Filename convention: t01.mp3 through t24.mp3, tW1.mp3, tW2.mp3
+   Supported formats: mp3, m4a, wav, ogg (app tries each in order)
+   Any technique without a recording automatically falls back to TTS.  */
+const AUDIO_MAP={
+  "Katate Kosatori Kokyunage":                        "audio/t01",
+  "Katatetori Tenkan Kokyunage":                      "audio/t02",
+  "Katatori Ikkyo (irimi & tenkan)":                  "audio/t03",
+  "Munetsuki Koteoroshi":                             "audio/t04",
+  "Yokomenuchi Shihonage (irimi & tenkan)":           "audio/t05",
+  "Shomenuchi Kokyunage":                             "audio/t06",
+  "Katatetori Nikkyo (irimi & tenkan)":               "audio/t07",
+  "Katatori Sankyo (irimi & tenkan)":                 "audio/t08",
+  "Katatori Yonkyo (irimi & tenkan)":                 "audio/t09",
+  "Yokomenuchi Kokyunage (Zenponage)":                "audio/t10",
+  "Ryotetori Kokyunage (Zenponage)":                  "audio/t11",
+  "Ushirotekubitori Kokyunage (Zenponage)":           "audio/t12",
+  "Ushirotekubitori Kubijimi (Sankyonage)":           "audio/t13",
+  "Tenchinage (irimi & tenkan)":                      "audio/t14",
+  "Ushirotori Kokyunage":                             "audio/t15",
+  "Katatetori Ryotemochi Kokyunage (En Undo)":        "audio/t16",
+  "Zagi Handachi Shomenuchi Kokyunage":               "audio/t17",
+  "Zagi Handachi Munetsuki Koteoroshi (katameru)":    "audio/t18",
+  "Zagi Handachi Yokomenuchi Kokyunage (Zenponage)":  "audio/t19",
+  "Munetsuki Kokyunage (Zenponage)":                  "audio/t20",
+  "Munetsuki Kokyunage (Sudori)":                     "audio/t21",
+  "Munetsuki Kokyunage (Kaitennage)":                 "audio/t22",
+  "Katatetori Ryotemochi Koteoroshi":                 "audio/t23",
+  "Katatetori Ryotemochi Kokyunage (Hachi No Ji)":    "audio/t24",
+  "Bokken 1: Happo Giri":                             "audio/tW1",
+  "Jo 1":                                             "audio/tW2",
+};
+
+/* Phonetic TTS fallback — used when no recording file is found */
 const PHONETIC={
-  // Full technique names keyed exactly as in data
   "Katate Kosatori Kokyunage":           "kah-tah-teh  koh-sah-toh-ree  koh-kyoo-nah-geh",
   "Katatetori Tenkan Kokyunage":         "kah-tah-teh-toh-ree  ten-kahn  koh-kyoo-nah-geh",
   "Katatori Ikkyo (irimi & tenkan)":     "kah-tah-toh-ree  eek-kyoh.  ee-ree-mee  and  ten-kahn",
@@ -500,7 +532,29 @@ const PHONETIC={
   "Jo 1":                                "joh  one",
 };
 
-function speak(name){
+let currentAudio=null;
+
+/* Try recorded file first (mp3 → m4a → wav → ogg), fall back to TTS if not found */
+function playCard(name){
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+  const base=AUDIO_MAP[name];
+  if(!base){speakTTS(name);return;}
+  const exts=['mp3','m4a','wav','ogg'];
+  let tried=0;
+  function tryNext(){
+    if(tried>=exts.length){speakTTS(name);return;}
+    const src=base+'.'+exts[tried++];
+    const a=new Audio(src);
+    currentAudio=a;
+    a.oncanplaythrough=()=>a.play().catch(()=>tryNext());
+    a.onerror=()=>tryNext();
+    a.load();
+  }
+  tryNext();
+}
+
+function speakTTS(name){
   if(!ttsEnabled)return;
   window.speechSynthesis.cancel();
   const text=PHONETIC[name]||name;
@@ -508,12 +562,11 @@ function speak(name){
   u.rate=0.82; u.pitch=1.0; u.lang='en-US';
   window.speechSynthesis.speak(u);
 }
-function speakCurrent(){
-  if(!ttsEnabled)return;
-  const rawName=document.getElementById('quiz-front').textContent.replace(/^\d+[\.\-]\s*/,'');
-  speak(rawName);
-}
 
+function speakCurrent(){
+  const rawName=document.getElementById('quiz-front').textContent.replace(/^\d+[\.-]\s*/,'');
+  playCard(rawName);
+}
 /* ── CHECKLIST ── */
 function buildChecklist(){
   let t=0,d=0;
@@ -589,7 +642,7 @@ function showCard(){
   document.getElementById('qc-mark').style.display='none';
   if(ttsEnabled){
     setTimeout(()=>{
-      speak(t.name);
+      playCard(t.name);
       setTimeout(()=>document.getElementById('tts-hint').textContent='',4500);
     },300);
   }
