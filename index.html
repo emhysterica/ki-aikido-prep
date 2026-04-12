@@ -239,10 +239,12 @@ input[type=date]:focus,input[type=text]:focus{border-color:var(--accent);}
         <button class="jw-tab on" onclick="showJW('yoko',this)">Yokomenuchi</button>
         <button class="jw-tab" onclick="showJW('kata',this)">Katatetori</button>
         <button class="jw-tab" onclick="showJW('ushiro',this)">Ushiro</button>
+        <button class="jw-tab" onclick="showJW('tanto',this)">Tantotori</button>
       </div>
       <div id="jw-yoko" class="jw-panel active"></div>
       <div id="jw-kata" class="jw-panel"></div>
       <div id="jw-ushiro" class="jw-panel"></div>
+      <div id="jw-tanto" class="jw-panel"></div>
     </div>
 
     <!-- VOCAB -->
@@ -274,7 +276,17 @@ input[type=date]:focus,input[type=text]:focus{border-color:var(--accent);}
         <div class="fmt-item"><div class="fmt-step">1 — Kumiwaza (24 techniques)</div><div class="fmt-text">The examiner calls each technique by name. Blend and lead — never meet force with force. Both irimi and tenkan required where listed. Maintain zanshin after each throw.</div></div>
         <div class="fmt-item"><div class="fmt-step">2 — Jiyu waza (free techniques)</div><div class="fmt-text">5 throws of your choice for each of 4 attacks: Yokomenuchi (left foot forward), Katatetori (left foot &amp; arm forward), Ushirotekubitori (right foot &amp; hand forward), and Tantotori (knife). Stay centered and lead uke rather than reacting.</div></div>
         <div class="fmt-item"><div class="fmt-step">3 — Bokken 1: Happo Giri</div><div class="fmt-text">Eight-direction sword cutting kata, performed solo. Each cut expresses extended ki. Keep one point through every direction change.</div></div>
-        <div class="fmt-item"><div class="fmt-step">4 — Jo 1</div><div class="fmt-text">First jo kata. Relaxed grip, weight underside, ki extending through the tip of the staff on every strike and thrust.</div></div>
+        <div class="fmt-item">
+          <div class="fmt-step">4 — Jo 1</div>
+          <div class="fmt-text" style="margin-bottom:10px;">First jo kata. Relaxed grip, weight underside, ki extending through the tip of the staff on every strike and thrust. Each movement is complete before the next begins.</div>
+          <div style="margin-bottom:10px;">
+            <a href="https://www.youtube.com/results?search_query=Koichi+Tohei+Jo+1+kata" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--gold);text-decoration:none;padding:6px 12px;border:1px solid var(--accent);border-radius:8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M10 15l5.19-3L10 9v6z"/><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/></svg>
+              Search: Koichi Tohei Jo 1 kata
+            </a>
+          </div>
+
+        </div>
         <div class="fmt-item"><div class="fmt-step">Etiquette</div><div class="fmt-text">Bow in with sincerity. If you make an error — reset with one point and continue. Do not apologize mid-test. Zanshin after every technique.</div></div>
       </div>
     </div>
@@ -334,10 +346,6 @@ const GROUPS=[
     {num:23,name:"Katatetori Ryotemochi Koteoroshi",attack:"One wrist grabbed with both of uke's hands",throw:"Use the double-grab as a connection point — do not fight it. Settle weight underside and drop your hand naturally downward. The heaviness of weight underside breaks their balance and leads them to the mat.",var:"",ki:[2,3]},
     {num:24,name:"Katatetori Ryotemochi Kokyunage (Hachi No Ji)",attack:"One wrist grabbed with both of uke's hands",throw:"Figure-eight movement. Trace a relaxed figure-8 path with the grabbed hand, extending ki through each curve. The changing direction continuously disrupts uke's grip until the throw releases naturally.",var:"",ki:[2,4]},
   ]},
-  {label:"Weapons",badge:"amber",techs:[
-    {num:"W-1",name:"Bokken 1: Happo Giri",attack:"Solo kata — no uke",throw:"Eight-direction sword cutting kata. Each cut expresses extended ki through the sword. Keep one point through every direction change. Cuts feel settled and complete, not hurried.",var:"",ki:[1,4]},
-    {num:"W-2",name:"Jo 1",attack:"Solo kata — no uke",throw:"First jo kata. Hold the staff with relaxed hands — weight underside, not a death grip. Ki extends through both ends of the jo. Each movement is complete before the next begins. Strikes: propel from the hip with a relaxed snap, ki extending through the tip. Thrusts: a direct linear extension of ki from one point — arm does not reach, the whole body advances. Sweeps: low cuts with weight underside, guiding rather than forcing. Transitions between strikes flow from continuous ki, not from stopping and restarting.",var:"",ki:[2,3]},
-  ]},
 ];
 
 const JW_DATA={
@@ -375,6 +383,18 @@ const JW_DATA={
       {id:"ushiro-3",name:"Ikkyo Tenkan",desc:"Turn with right foot (tenkan) as uke grabs from behind. As you turn, guide uke's arm — elbow and wrist — downward in a relaxed arc from your center. Lead uke to the mat for the ikkyo pin. Weight underside throughout the arc."},
       {id:"ushiro-4",name:"Kirikaeshi",desc:"Armpit, skip, then side bow. As uke grabs from behind, step forward and skip/turn to come beside uke. Extend your arm up and under uke's armpit. Then bow to the side — not straight forward — from one point, weight underside, ki extending sideways. Uke rolls out over your extended arm to the side."},
       {id:"ushiro-5",name:"Kokyunage",desc:"Settle one point as uke grabs from behind. Turn from your center with right foot leading and extend ki outward — to the side or forward depending on uke's energy. The projection is a natural release of extended ki that uke cannot hold onto."},
+    ]
+  },
+  tanto:{
+    title:"Tantotori",
+    stance:"Knife defense — stay calm, extend ki, redirect the weapon hand",
+    desc:"Uke attacks with a tanto (knife) repeatedly. Move with calm awareness — not panic. Redirect the weapon hand by extending ki through and beyond it. Keep one point; a tense body telegraphs movement and slows response.",
+    throws:[
+      {id:"tanto-1",name:"Shomenuchi Kokyunage",desc:"As uke thrusts or raises the knife toward your head (shomenuchi angle), receive the strike with rising ki — extend upward without bracing. Blend and redirect the weapon hand off to the side or forward. The breath throw (kokyunage) follows naturally from harmonizing with uke's committed energy. Do not grab the knife hand — lead it."},
+      {id:"tanto-2",name:"Yokomenuchi Shihonage",desc:"As uke delivers a diagonal knife strike to the side of your head or neck (yokomenuchi), meet it with extended ki and guide the weapon arm. Take the wrist and rotate through your center — not with arm strength — bringing the arm overhead and down behind uke in shihonage. Keep one point as your center anchors the rotation. Irimi or tenkan depending on the angle."},
+      {id:"tanto-3",name:"Munetsuki Kokyunage (Zenponage)",desc:"As uke thrusts the knife straight to your chest (munetsuki), blend off the line and extend ki forward through the weapon arm, leading uke into a forward roll. You are not blocking the knife — you are leading uke's energy past you so their body follows. Give them room to roll forward."},
+      {id:"tanto-4",name:"Munetsuki Hiji Uchi Munuchi",desc:"As uke thrusts to the chest (munetsuki), blend off the line and strike to uke's elbow (hiji uchi) — a sharp atemi to the elbow joint that disrupts the weapon arm's structure. Follow immediately with a chest-level strike or projection (munuchi). The elbow strike breaks uke's grip and balance; your follow-through leads them to the mat. Keep weight underside throughout."},
+      {id:"tanto-5",name:"Munetsuki Koteoroshi",desc:"As uke thrusts the knife to your chest (munetsuki), blend off the line without tensing. Receive the weapon wrist and drop it with your body weight — not arm strength — directly downward. Weight underside makes the drop heavy and irresistible. Uke's grip on the knife loosens as their wrist and balance are taken downward to the mat."},
     ]
   }
 };
@@ -498,8 +518,7 @@ const AUDIO_MAP={
   "Munetsuki Kokyunage (Kaitennage)":                 "audio/t22",
   "Katatetori Ryotemochi Koteoroshi":                 "audio/t23",
   "Katatetori Ryotemochi Kokyunage (Hachi No Ji)":    "audio/t24",
-  "Bokken 1: Happo Giri":                             "audio/tW1",
-  "Jo 1":                                             "audio/tW2",
+  /* Bokken and Jo 1 removed from quiz — see List tab */
 };
 
 /* Phonetic TTS fallback — used when no recording file is found */
@@ -528,8 +547,7 @@ const PHONETIC={
   "Munetsuki Kokyunage (Kaitennage)":    "moo-neh-tsoo-kee  koh-kyoo-nah-geh.  kai-ten-nah-geh",
   "Katatetori Ryotemochi Koteoroshi":    "kah-tah-teh-toh-ree  ryoh-teh-moh-chee  koh-teh-oh-roh-shee",
   "Katatetori Ryotemochi Kokyunage (Hachi No Ji)": "kah-tah-teh-toh-ree  ryoh-teh-moh-chee  koh-kyoo-nah-geh.  hah-chee  noh  jee",
-  "Bokken 1: Happo Giri":                "bok-ken  one.  hahp-poh  gee-ree",
-  "Jo 1":                                "joh  one",
+  /* Bokken and Jo 1 removed from quiz */
 };
 
 let currentAudio=null;
@@ -568,6 +586,102 @@ function speakCurrent(){
   playCard(rawName);
 }
 /* ── CHECKLIST ── */
+/* ── WEAPONS DATA (shown on List tab, not in quiz) ── */
+const WEAPONS=[
+  {
+    id:"W-1",
+    name:"Bokken 1: Happo Giri",
+    desc:"Eight-direction sword cutting kata performed solo. Each cut expresses extended ki through the sword. Keep one point through every direction change. Cuts feel settled and complete, not hurried.",
+    steps:[
+      {n:1, name:"Shomen giri — front cut",     desc:"Step forward with the right foot and cut straight down from overhead. Ki extends through the tip of the bokken. One point settled at the bottom of the cut."},
+      {n:2, name:"Ushiro giri — rear cut",       desc:"Turn 180°. Cut straight down to the rear. Weight underside through the cut; do not lean forward."},
+      {n:3, name:"Migi yokomen — right diagonal",desc:"Turn to face the right diagonal. Cut downward at an angle across the right side. Rotate from your center."},
+      {n:4, name:"Hidari yokomen — left diagonal",desc:"Turn to face the left diagonal. Mirror the previous cut on the left side. Keep one point through the turn."},
+      {n:5, name:"Migi yoko — right side cut",   desc:"Turn to face directly right. Horizontal or downward cut to the right. Weight underside through the strike."},
+      {n:6, name:"Hidari yoko — left side cut",  desc:"Turn to face directly left. Mirror cut to the left side. Ki extends fully through the bokken tip."},
+      {n:7, name:"Migi naname — right rear diagonal", desc:"Turn to face the right rear diagonal. Cut downward. Each cut is complete — do not rush into the next turn."},
+      {n:8, name:"Hidari naname — left rear diagonal", desc:"Turn to face the left rear diagonal. Final cut of the kata. Settle one point; extend ki through the tip. Return to shomen to complete."},
+    ]
+  },
+  {
+    id:"W-2",
+    name:"Jo 1",
+    desc:"First jo kata. Relaxed grip, weight underside, ki extending through both ends of the jo. Each movement is complete before the next begins.",
+    steps:[
+      {n:1,  name:"Tsuki (chudan)",         desc:"Forward thrust to mid-level. Step forward with the right foot, extending ki through the tip. The whole body advances — the arm does not reach independently."},
+      {n:2,  name:"Jodan gaeshi / uke",     desc:"Raise the jo overhead in a high circular parry. Redirect an incoming strike with a smooth circular movement — weight underside, ki leading the arc."},
+      {n:3,  name:"Shomen uchikomi",        desc:"Step forward and cut down overhead to the front of the head. Ki extends through the tip on the downward cut. One point settled throughout."},
+      {n:4,  name:"Tsuki (chudan)",         desc:"Forward thrust to mid-level from the new position. Step and extend ki through the tip."},
+      {n:5,  name:"Gedan gaeshi",           desc:"Low sweeping counter/parry. Redirect a low attack with weight underside — a guiding motion, not a muscular block."},
+      {n:6,  name:"Tsuki (chudan)",         desc:"Forward thrust continuing the rhythm. Maintain ki extension and one point."},
+      {n:7,  name:"Jodan gaeshi / uke",     desc:"High block/parry again. Circular overhead movement — blend with the incoming energy rather than stopping it."},
+      {n:8,  name:"Shomen uchikomi",        desc:"Overhead downward strike stepping forward. Extend ki through the jo on the cut."},
+      {n:9,  name:"Tsuki (chudan)",         desc:"Forward thrust. Continue the flow — each thrust is a complete extension of ki, not just an arm motion."},
+      {n:10, name:"Gedan gaeshi",           desc:"Low sweeping counter, stepping through. Weight underside through the sweep."},
+      {n:11, name:"Ushiro tsuki",           desc:"Rear thrust. Direct the back end of the jo to an imagined opponent behind you. Extend ki backward — your awareness extends behind you."},
+      {n:12, name:"Jodan uke",              desc:"High rising block or parry to the upper level. Meet the incoming energy with extended ki upward."},
+      {n:13, name:"Shomen uchikomi",        desc:"Overhead downward strike. Keep one point as the strike lands — do not collapse forward."},
+      {n:14, name:"Jodan tsuki",            desc:"High-level forward thrust directed toward the throat or face. Extend ki precisely through the tip."},
+      {n:15, name:"Jodan tsuki (repeat)",   desc:"A second high-level thrust from the same position. The repeat builds pressure — extend ki fully on each thrust."},
+      {n:16, name:"Gedan tsuki",            desc:"Low-level thrust directed toward the knee. Drop weight underside as ki extends downward through the tip."},
+      {n:17, name:"Hayan gedan gaeshi",     desc:"Quick low sweeping counter, then drop to one knee. The drop is from one point — settle weight underside as you kneel."},
+      {n:18, name:"Stand and gedan gaeshi", desc:"Rise and perform another low sweeping counter to knee level. Rise from one point, weight underside through the sweep."},
+      {n:19, name:"Reverse gedan tsuki",    desc:"A reverse low thrust toward the knee, mirroring step 16. Ki extends through the back tip of the jo downward."},
+      {n:20, name:"Tsuki (chudan)",         desc:"Forward mid-level thrust, returning to right tsuki kamae. Settle one point and extend ki fully."},
+      {n:21, name:"Jodan barai",            desc:"Step back with the left foot and perform a sweeping high block/parry — similar to the opening block of 2nd kumijo. Settle into left tsuki kamae."},
+      {n:22, name:"Tsuki (hidari / left)",  desc:"Final forward thrust from the left side. Extend ki fully through the tip. Maintain zanshin after the thrust."},
+    ]
+  }
+];
+
+function buildWeaponsSection(){
+  const saved=JSON.parse(localStorage.getItem('ki3k_wpnnotes')||'{}');
+  return WEAPONS.map(w=>`
+    <div class="group-card" style="margin-bottom:14px;">
+      <div class="group-head" style="cursor:pointer;" onclick="toggleWeapon('${w.id}')">
+        <span class="group-name">${w.name}</span>
+        <span style="font-size:12px;color:var(--accent2);" id="wpn-toggle-${w.id}">▼ steps</span>
+      </div>
+      <div style="padding:10px 16px 4px;border-bottom:1px solid var(--paper3);">
+        <div style="font-size:13px;color:#666;line-height:1.6;">${w.desc}</div>
+      </div>
+      <div id="wpn-steps-${w.id}" style="display:none;">
+        ${w.steps.map(s=>`<div style="display:flex;gap:10px;padding:9px 16px;border-bottom:1px solid var(--paper3);align-items:flex-start;">
+          <div style="font-family:var(--serif);font-size:16px;color:var(--gold);min-width:24px;flex-shrink:0;line-height:1.3;">${s.n}</div>
+          <div>
+            <div style="font-size:14px;font-weight:500;margin-bottom:3px;">${s.name}</div>
+            <div style="font-size:13px;color:#666;line-height:1.6;">${s.desc}</div>
+          </div>
+        </div>`).join('')}
+        <div style="padding:12px 16px;">
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">My notes</div>
+          <textarea style="width:100%;background:var(--paper);border:1px solid var(--paper3);border-radius:8px;font-family:var(--sans);font-size:14px;color:var(--ink);padding:9px 11px;resize:none;outline:none;min-height:72px;" id="wpn-notes-${w.id}" placeholder="Add notes for ${w.name}…">${saved[w.id]||''}</textarea>
+          <div style="display:flex;align-items:center;margin-top:6px;">
+            <button class="notes-save" style="color:var(--accent);border-color:var(--paper3);" onclick="saveWeaponNote('${w.id}')">Save note</button>
+            <span class="notes-saved" id="wpn-saved-${w.id}">Saved!</span>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleWeapon(id){
+  const el=document.getElementById('wpn-steps-'+id);
+  const lbl=document.getElementById('wpn-toggle-'+id);
+  const open=el.style.display==='none';
+  el.style.display=open?'block':'none';
+  lbl.textContent=open?'▲ steps':'▼ steps';
+}
+
+function saveWeaponNote(id){
+  const val=document.getElementById('wpn-notes-'+id).value.trim();
+  let saved=JSON.parse(localStorage.getItem('ki3k_wpnnotes')||'{}');
+  if(val)saved[id]=val;else delete saved[id];
+  localStorage.setItem('ki3k_wpnnotes',JSON.stringify(saved));
+  const msg=document.getElementById('wpn-saved-'+id);
+  msg.style.opacity='1';setTimeout(()=>msg.style.opacity='0',1800);
+}
+
 function buildChecklist(){
   let t=0,d=0;
   GROUPS.forEach(g=>g.techs.forEach(x=>{t++;if(checks[String(x.num)])d++;}));
@@ -582,12 +696,14 @@ function buildChecklist(){
     return`<div class="group-card">
       <div class="group-head"><span class="group-name">${g.label}</span><span class="group-badge badge-${g.badge}">${gd}/${g.techs.length}</span></div>
       <div class="prog-wrap"><div class="prog-bar" style="width:${gp}%"></div></div>
-      ${g.techs.map(x=>{const k=String(x.num),c=!!checks[k];return`<div class="check-item">
+      ${g.techs.map(x=>{const k=String(x.num),cv=!!checks[k];return`<div class="check-item">
         <span class="check-num">${x.num}</span>
-        <input type="checkbox" id="ck${k}" ${c?'checked':''} onchange="tog('${k}')"/>
-        <label class="check-name${c?' done':''}" for="ck${k}">${x.name}</label>
+        <input type="checkbox" id="ck${k}" ${cv?'checked':''} onchange="tog('${k}')"/>
+        <label class="check-name${cv?' done':''}" for="ck${k}">${x.name}</label>
       </div>`;}).join('')}
-    </div>`;}).join('');
+    </div>`;}).join('')
+    + '<div style="margin-top:4px;"><div style="font-family:var(--serif);font-size:16px;font-weight:500;margin-bottom:10px;padding-top:4px;">Weapons kata</div>'
+    + buildWeaponsSection() + '</div>';
 }
 function tog(k){checks[k]=!checks[k];sc();buildChecklist();}
 
